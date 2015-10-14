@@ -16,15 +16,19 @@ bool isSending = false;
 Adafruit_HDC1000 hdc;
 
 void setup(){
+  // Start by sleeping for a while. This is the only way to be sure the board is really in ULP mode...
+  RFduino_ULPDelay(10000);
+}
 
-  Serial.begin(9600);
+void loop() {
+  // Do the work
+  sendToHost(readFromHTC());
+  // Go back to ULP mode
+  RFduino_systemReset();
+}
 
-  // Gnd on pin 4 for HTC sensor
-  pinMode(5, OUTPUT);
-  digitalWrite(5, LOW);
 
-  // Vcc on pin 3 for HTC sensor
-  pinMode(6, OUTPUT);
+void sendToHost(struct SensorData data){
 
   // Max power
   RFduinoGZLL.txPowerLevel = +4;
@@ -34,32 +38,6 @@ void setup(){
   RFduinoGZLL.hostBaseAddress = 0x4A27E98F;
   RFduinoGZLL.deviceBaseAddress = 0xF487EE4A;
 
-
-
-}
-
-void loop() {
-  int loopStartTime = millis();
-
-  struct SensorData data = readFromHTC();
-
-  if(data.isValid){
-    Serial.println(data.temperature);
-    Serial.println(data.humidity);
-  }
-  else{
-    Serial.println("NO SENSOR?");
-  }
-
-  sendToHost(data);
-
-  Serial.print("Loop Duration: ");
-  Serial.println(millis() - loopStartTime);
-  RFduino_ULPDelay(2000);
-}
-
-
-void sendToHost(struct SensorData data){
   // Start GZLL
   RFduinoGZLL.begin(role);
 
@@ -67,9 +45,9 @@ void sendToHost(struct SensorData data){
   isSending = true;
   RFduinoGZLL.sendToHost((char *)&data, sizeof(data));
 
-  // Wait max 10 seconds for ACK
+  // Wait max 5 seconds for ACK
   int startTime = millis();
-  while(isSending && ( millis()-startTime < 10000)){
+  while(isSending && ( millis()-startTime < 5000)){
     delay(10);
   }
 
@@ -86,7 +64,10 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len)
 
 struct SensorData readFromHTC(){
   // Turn sensor on.
-  digitalWrite(6, HIGH);
+  pinMode(5, OUTPUT);
+  digitalWrite(5, LOW); // Gnd
+  pinMode(6, OUTPUT);
+  digitalWrite(6, HIGH); // Vcc
 
   hdc = Adafruit_HDC1000();
 
