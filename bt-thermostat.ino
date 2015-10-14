@@ -7,6 +7,7 @@ struct SensorData {
   bool isValid; // 1 byte
   float temperature;  // 4 bytes
   float humidity;  // 4 bytes
+  char id; // 1 byte
   // NOTE: compiler will reserve a byte here not defined
 };
 
@@ -83,8 +84,7 @@ struct SensorData readFromHTC(){
     result.humidity = 0;
   }
 
-  // Turn sensor off.
-  digitalWrite(6, HIGH);
+  result.id = 'A';
 
   return result;
 }
