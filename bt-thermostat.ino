@@ -11,12 +11,12 @@ void setup(){
   Serial.println("START");
 
   // Vcc on pin 3 for HTC sensor
-  pinMode(3, OUTPUT);
-  digitalWrite(3, HIGH);
+  pinMode(6, OUTPUT);
+  digitalWrite(6, HIGH);
 
   // Gnd on pin 4 for HTC sensor
-  pinMode(4, OUTPUT);
-  digitalWrite(4, LOW);
+  pinMode(5, OUTPUT);
+  digitalWrite(5, LOW);
 
   hdc = Adafruit_HDC1000();
 
