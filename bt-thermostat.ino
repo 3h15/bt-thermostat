@@ -18,15 +18,16 @@ Adafruit_HDC1000 hdc;
 
 void setup(){
   // Start by sleeping for a while. This is the only way to be sure the board is really in ULP mode...
-  RFduino_ULPDelay(10000);
-}
+  RFduino_ULPDelay(120000);
 
-void loop() {
   // Do the work
   sendToHost(readFromHTC());
   // Go back to ULP mode
   RFduino_systemReset();
 }
+
+
+void loop() {}
 
 
 void sendToHost(struct SensorData data){
