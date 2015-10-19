@@ -18,10 +18,24 @@ Adafruit_HDC1000 hdc;
 
 void setup(){
   // Start by sleeping for a while. This is the only way to be sure the board is really in ULP mode...
-  RFduino_ULPDelay(120000);
+  RFduino_ULPDelay(3000);
 
   // Do the work
-  sendToHost(readFromHTC());
+  // Serial.begin(9600);
+
+  // int startTime = millis();
+  struct SensorData data = readFromHTC();
+  // Serial.print("Mesure: ");
+  // Serial.println(millis()-startTime);
+  //
+  // startTime = millis();
+  sendToHost(data);
+  // Serial.print("Radio: ");
+  // Serial.println(millis()-startTime);
+  // Serial.println();
+  //
+  // delay(30);
+
   // Go back to ULP mode
   RFduino_systemReset();
 }
@@ -47,9 +61,9 @@ void sendToHost(struct SensorData data){
   isSending = true;
   RFduinoGZLL.sendToHost((char *)&data, sizeof(data));
 
-  // Wait max 5 seconds for ACK
+  // Wait max 500 milliseconds for ACK
   int startTime = millis();
-  while(isSending && ( millis()-startTime < 5000)){
+  while(isSending && ( millis()-startTime < 500)){
     delay(10);
   }
 
@@ -85,7 +99,7 @@ struct SensorData readFromHTC(){
     result.humidity = 0;
   }
 
-  result.id = 'A';
+  result.id = 'G';
 
   return result;
 }
