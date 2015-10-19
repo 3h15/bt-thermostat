@@ -18,7 +18,7 @@ Adafruit_HDC1000 hdc;
 
 void setup(){
   // Start by sleeping for a while. This is the only way to be sure the board is really in ULP mode...
-  RFduino_ULPDelay(3000);
+  RFduino_ULPDelay(300000);
 
   // Do the work
   // Serial.begin(9600);
@@ -99,7 +99,7 @@ struct SensorData readFromHTC(){
     result.humidity = 0;
   }
 
-  result.id = 'G';
+  result.id = 'A';
 
   return result;
 }
