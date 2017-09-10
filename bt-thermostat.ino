@@ -63,7 +63,7 @@ void sendToHost(struct SensorData data){
 
   // Wait max 500 milliseconds for ACK
   int startTime = millis();
-  while(isSending && ( millis()-startTime < 500)){
+  while(isSending && ( millis()-startTime < 750)){
     delay(10);
   }
 
