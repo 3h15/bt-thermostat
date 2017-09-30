@@ -1,15 +1,12 @@
 /*************************************************** 
   This is a library for the HDC1000 Humidity & Temp Sensor
-
   Designed specifically to work with the HDC1000 sensor from Adafruit
   ----> https://www.adafruit.com/products/2635
-
   These sensors use I2C to communicate, 2 pins are required to  
   interface
   Adafruit invests time and resources providing this open source code, 
   please support Adafruit and open-source hardware by purchasing 
   products from Adafruit!
-
   Written by Limor Fried/Ladyada for Adafruit Industries.  
   BSD license, all text above must be included in any redistribution
  ****************************************************/
@@ -50,13 +47,15 @@ class Adafruit_HDC1000 {
   float readTemperature(void);
   float readHumidity(void);
   void reset(void);
+  void drySensor(void);
 
   uint16_t read16(uint8_t a, uint8_t d=0);
   uint32_t read32(uint8_t a, uint8_t d=0);
-  
+  void writeConfig(uint16_t config);
+
+
  private:
   boolean readData(void);
   float humidity, temp;
   uint8_t _i2caddr;
 };
-
