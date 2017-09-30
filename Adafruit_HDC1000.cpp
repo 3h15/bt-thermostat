@@ -23,7 +23,7 @@ Adafruit_HDC1000::Adafruit_HDC1000() {
 boolean Adafruit_HDC1000::begin(uint8_t addr) {
   _i2caddr = addr;
 
-  Wire.begin();
+  Wire.beginOnPins(4,3);
   
   reset();
   if (read16(HDC1000_MANUFID) != 0x5449) return false;
